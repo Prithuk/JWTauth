@@ -29,11 +29,11 @@ public class JwtController {
     @RequestMapping(value = "/token", method = RequestMethod.POST)
     public ResponseEntity<?> generateToken(@RequestBody JwtRequest jwtRequest) throws Exception {
         System.out.println(jwtRequest.toString());
-        try {
-        } catch (UsernameNotFoundException e) {
-            e.printStackTrace();
-            throw new Exception("Bad Credentials");
-        }
+//        try {
+//        } catch (UsernameNotFoundException e) {
+//            e.printStackTrace();
+//            throw new Exception("Bad Credentials");
+//        }
 
         final UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(jwtRequest.getUsername());
         final String token = this.jwtUtil.generateToken(userDetails);
