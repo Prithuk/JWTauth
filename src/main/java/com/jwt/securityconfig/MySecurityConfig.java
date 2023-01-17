@@ -24,6 +24,9 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthFilter authFilter;
 
+    @Autowired
+    private JwtAuthEntryPoint jwtAuthEntryPoint;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customUserDetailsService);
@@ -35,11 +38,12 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .cors().disable()
                 .authorizeRequests()
-                .antMatchers(new String[]{"/token"}).permitAll()
+                .antMatchers(new String[]{"/token", "/file/**"}).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint);
         http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
